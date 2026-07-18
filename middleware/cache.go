@@ -8,6 +8,8 @@ func Cache() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		if c.Request.RequestURI == "/" {
 			c.Header("Cache-Control", "no-cache")
+		} else if c.Request.URL.Path == "/logo.png" {
+			c.Header("Cache-Control", "no-cache, max-age=0, must-revalidate")
 		} else {
 			c.Header("Cache-Control", "max-age=604800") // one week
 		}
