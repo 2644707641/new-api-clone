@@ -18,32 +18,18 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { CherryStudio } from '@lobehub/icons'
 import { Link } from '@tanstack/react-router'
-import { ArrowRight, BookOpen } from 'lucide-react'
+import { ArrowRight, BookOpen, Ellipsis } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { useStatus } from '@/hooks/use-status'
 
-import { HeroTerminalDemo } from '../hero-terminal-demo'
+import { HOME_HERO_BACKGROUND_STYLE, HOME_TRUST_ITEMS } from '../../home-layout'
 
 interface HeroProps {
   className?: string
   isAuthenticated?: boolean
 }
-
-// Stylized three-dots indicator representing "More"
-const MoreIcon = () => (
-  <svg
-    className='text-muted-foreground/60 group-hover:text-foreground size-6 shrink-0 transition-colors'
-    viewBox='0 0 24 24'
-    fill='none'
-    xmlns='http://www.w3.org/2000/svg'
-  >
-    <circle cx='6' cy='12' r='2' fill='currentColor' />
-    <circle cx='12' cy='12' r='2' fill='currentColor' />
-    <circle cx='18' cy='12' r='2' fill='currentColor' />
-  </svg>
-)
 
 export function Hero(props: HeroProps) {
   const { t } = useTranslation()
@@ -57,12 +43,12 @@ export function Hero(props: HeroProps) {
       return (
         <Button
           variant='outline'
-          className='group border-border/50 hover:border-border hover:bg-muted/50 inline-flex h-11 items-center gap-1.5 rounded-lg px-5 text-sm font-medium'
+          className='group inline-flex h-11 items-center gap-1.5 rounded-lg border border-slate-900/15 bg-white/70 px-5 text-sm font-medium text-slate-950 hover:border-slate-900/25 hover:bg-white hover:text-slate-950'
           render={
             <a href={docsUrl} target='_blank' rel='noopener noreferrer' />
           }
         >
-          <BookOpen className='text-muted-foreground/80 group-hover:text-foreground size-4 transition-colors duration-200' />
+          <BookOpen className='size-4 text-slate-600 transition-colors duration-200 group-hover:text-slate-950' />
           <span>{t('Docs')}</span>
         </Button>
       )
@@ -70,62 +56,45 @@ export function Hero(props: HeroProps) {
     return (
       <Button
         variant='outline'
-        className='group border-border/50 hover:border-border hover:bg-muted/50 inline-flex h-11 items-center gap-1.5 rounded-lg px-5 text-sm font-medium'
+        className='group inline-flex h-11 items-center gap-1.5 rounded-lg border border-slate-900/15 bg-white/70 px-5 text-sm font-medium text-slate-950 hover:border-slate-900/25 hover:bg-white hover:text-slate-950'
         render={<Link to={docsUrl} />}
       >
-        <BookOpen className='text-muted-foreground/80 group-hover:text-foreground size-4 transition-colors duration-200' />
+        <BookOpen className='size-4 text-slate-600 transition-colors duration-200 group-hover:text-slate-950' />
         <span>{t('Docs')}</span>
       </Button>
     )
   }
 
   return (
-    <section className='relative z-10 overflow-hidden px-6 pt-24 pb-16 md:pt-32 md:pb-24 lg:pt-36 lg:pb-28'>
-      {/* Radial gradient background */}
-      <div
-        aria-hidden
-        className='pointer-events-none absolute inset-0 -z-10 opacity-25 dark:opacity-[0.12]'
-        style={{
-          background: [
-            'radial-gradient(ellipse 60% 50% at 20% 20%, oklch(0.72 0.18 250 / 80%) 0%, transparent 70%)',
-            'radial-gradient(ellipse 50% 40% at 80% 15%, oklch(0.65 0.15 200 / 60%) 0%, transparent 70%)',
-            'radial-gradient(ellipse 40% 35% at 40% 80%, oklch(0.70 0.12 280 / 40%) 0%, transparent 70%)',
-          ].join(', '),
-        }}
-      />
-      {/* Grid pattern */}
-      <div
-        aria-hidden
-        className='absolute inset-0 -z-10 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_30%,black_20%,transparent_100%)] bg-[size:4rem_4rem] opacity-[0.08]'
-      />
-
-      <div className='mx-auto grid max-w-6xl grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-8'>
-        {/* Left Column: Title, description, action buttons and application support */}
-        <div className='flex flex-col items-start text-left lg:col-span-6'>
-          {/* Top Pill Badge */}
+    <section
+      className='relative z-10 overflow-hidden border-b border-transparent px-6 py-16 text-slate-950 md:py-24'
+      style={HOME_HERO_BACKGROUND_STYLE}
+    >
+      <div className='mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16'>
+        <div className='flex flex-col items-start text-left'>
           <div
-            className='landing-animate-fade-up mb-5 inline-flex items-center gap-1.5 rounded-full border border-blue-500/20 bg-blue-500/5 px-3 py-1.5 text-[11px] font-medium text-blue-600 opacity-0 shadow-xs dark:border-blue-400/20 dark:bg-blue-400/5 dark:text-blue-400'
+            className='landing-animate-fade-up mb-5 inline-flex items-center gap-1.5 rounded-full border border-slate-900/15 bg-white/70 px-3 py-1.5 text-xs font-medium text-slate-950 opacity-0'
             style={{ animationDelay: '0ms' }}
           >
             <span className='relative flex size-1.5'>
-              <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75' />
-              <span className='relative inline-flex size-1.5 rounded-full bg-blue-500 dark:bg-blue-400' />
+              <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-500/50 opacity-75' />
+              <span className='relative inline-flex size-1.5 rounded-full bg-blue-600' />
             </span>
             <span>{t('AI Application Infrastructure Foundation')}</span>
           </div>
 
           <h1
-            className='landing-animate-fade-up text-[clamp(2.25rem,4.5vw,3.25rem)] leading-[1.15] font-bold tracking-tight'
+            className='landing-animate-fade-up text-3xl leading-tight font-bold opacity-0 md:text-5xl'
             style={{ animationDelay: '60ms' }}
           >
             {t('Unified API Gateway for')}
             <br />
-            <span className='bg-gradient-to-r from-blue-400 via-violet-400 to-purple-500 bg-clip-text text-transparent'>
+            <span className='text-blue-700'>
               {t('Vast Range of AI Models')}
             </span>
           </h1>
           <p
-            className='landing-animate-fade-up text-muted-foreground/80 mt-5 max-w-xl text-base leading-relaxed opacity-0 md:text-[15px]'
+            className='landing-animate-fade-up mt-5 max-w-xl text-base leading-relaxed text-slate-700 opacity-0 md:text-[15px]'
             style={{ animationDelay: '120ms' }}
           >
             {t(
@@ -140,7 +109,7 @@ export function Hero(props: HeroProps) {
             {props.isAuthenticated ? (
               <>
                 <Button
-                  className='group h-11 rounded-lg px-5 text-sm font-medium'
+                  className='group h-11 rounded-lg bg-slate-950 px-5 text-sm font-medium text-white hover:bg-slate-800 hover:text-white'
                   render={<Link to='/dashboard' />}
                 >
                   {t('Go to Dashboard')}
@@ -151,7 +120,7 @@ export function Hero(props: HeroProps) {
             ) : (
               <>
                 <Button
-                  className='group h-11 rounded-lg px-5 text-sm font-medium'
+                  className='group h-11 rounded-lg bg-slate-950 px-5 text-sm font-medium text-white hover:bg-slate-800 hover:text-white'
                   render={<Link to='/sign-up' />}
                 >
                   {t('Get Started')}
@@ -159,7 +128,7 @@ export function Hero(props: HeroProps) {
                 </Button>
                 <Button
                   variant='outline'
-                  className='border-border/50 hover:border-border hover:bg-muted/50 h-11 rounded-lg px-5 text-sm font-medium'
+                  className='h-11 rounded-lg border border-slate-900/15 bg-white/70 px-5 text-sm font-medium text-slate-950 hover:border-slate-900/25 hover:bg-white hover:text-slate-950'
                   render={<Link to='/pricing' />}
                 >
                   {t('View Pricing')}
@@ -169,75 +138,76 @@ export function Hero(props: HeroProps) {
             )}
           </div>
 
-          {/* Supported Apps (参考图二样式，进行卡片化和信息扩充设计，增加视觉高度) */}
           <div
-            className='landing-animate-fade-up mt-10 w-full max-w-xl opacity-0'
+            className='landing-animate-fade-up mt-10 w-full opacity-0'
             style={{ animationDelay: '240ms' }}
           >
             <div className='mb-4 flex flex-col gap-1'>
-              <span className='text-muted-foreground/50 text-[10px] font-bold tracking-[0.15em] uppercase'>
+              <span className='text-[10px] font-bold tracking-[0.15em] text-slate-700 uppercase'>
                 {t('Supported Applications')}
               </span>
-              <p className='text-muted-foreground/60 text-xs leading-relaxed'>
+              <p className='text-xs leading-relaxed text-slate-600'>
                 {t(
                   'Supports one-click configuration and perfectly adapts to NewAPI multi-protocol configuration.'
                 )}
               </p>
             </div>
             <div className='flex flex-wrap items-center gap-3'>
-              {/* Cherry Studio */}
               <a
                 href='https://cherry-ai.com'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='group border-border/40 bg-muted/15 text-foreground/80 hover:border-border hover:bg-muted/30 hover:text-foreground flex items-center gap-3 rounded-full border px-5 py-2.5 text-sm font-medium shadow-[0_1px_2.5px_rgba(0,0,0,0.01)] backdrop-blur-xs transition-all duration-300 hover:scale-[1.02]'
+                className='flex items-center gap-2 rounded-lg border border-slate-900/15 bg-white/70 px-4 py-2 text-sm font-medium text-slate-950 transition-colors hover:border-slate-900/25 hover:bg-white hover:text-slate-950'
               >
                 <CherryStudio.Color size={24} className='shrink-0' />
                 <span>Cherry Studio</span>
               </a>
 
-              {/* CC Switch */}
-              <a
-                href='https://ccswitch.io'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='group border-border/40 bg-muted/15 text-foreground/80 hover:border-border hover:bg-muted/30 hover:text-foreground flex items-center gap-3 rounded-full border px-5 py-2.5 text-sm font-medium shadow-[0_1px_2.5px_rgba(0,0,0,0.01)] backdrop-blur-xs transition-all duration-300 hover:scale-[1.02]'
-              >
-                <img
-                  src='https://ccswitch.io/favicon.png'
-                  alt='CC Switch'
-                  className='size-6 shrink-0 rounded-md object-contain'
-                  onError={(e) => {
-                    // Fallback to a styled text avatar if the remote favicon fails to load in sandbox or local environments
-                    e.currentTarget.style.display = 'none'
-                    const fallback = e.currentTarget.nextSibling as HTMLElement
-                    if (fallback) fallback.style.display = 'flex'
-                  }}
-                />
-                <span
-                  style={{ display: 'none' }}
-                  className='size-6 shrink-0 items-center justify-center rounded-md bg-blue-500/10 text-[10px] font-bold text-blue-600 dark:bg-blue-400/10 dark:text-blue-400'
-                >
-                  CC
-                </span>
-                <span>CC Switch</span>
-              </a>
-
-              {/* "更多" */}
-              <div className='group border-border/40 bg-muted/15 text-foreground/55 hover:border-border hover:bg-muted/30 hover:text-foreground flex cursor-default items-center gap-2.5 rounded-full border px-5 py-2.5 text-sm font-medium shadow-[0_1px_2.5px_rgba(0,0,0,0.01)] backdrop-blur-xs transition-all duration-300 hover:scale-[1.02]'>
-                <MoreIcon />
+              <div className='flex cursor-default items-center gap-2 rounded-lg border border-slate-900/15 bg-white/70 px-4 py-2 text-sm font-medium text-slate-700'>
+                <Ellipsis className='size-5' aria-hidden='true' />
                 <span>{t('More Apps')}</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Hero Terminal API Demo */}
         <div
-          className='landing-animate-fade-up flex w-full justify-center opacity-0 lg:col-span-6'
+          className='landing-animate-fade-up w-full opacity-0'
           style={{ animationDelay: '320ms' }}
         >
-          <HeroTerminalDemo className='mt-8 lg:mt-0' />
+          <aside className='w-full rounded-lg border border-white/50 bg-white p-6 text-slate-950 shadow-xl md:p-8'>
+            <div className='mb-6 border-b border-slate-200 pb-5'>
+              <h2 className='text-xl font-bold'>{t('Secure & Reliable')}</h2>
+              <p className='mt-3 text-sm leading-relaxed text-slate-600'>
+                {t(
+                  'Enterprise-grade security with comprehensive permission management'
+                )}
+              </p>
+            </div>
+            <ul className='space-y-5'>
+              {HOME_TRUST_ITEMS.map((item) => {
+                const Icon = item.icon
+
+                return (
+                  <li key={item.id} className='flex items-start gap-3'>
+                    <span
+                      className={`flex size-9 shrink-0 items-center justify-center rounded-full ${item.accentClassName}`}
+                    >
+                      <Icon className='size-4' aria-hidden='true' />
+                    </span>
+                    <div className='min-w-0'>
+                      <h3 className='text-sm font-semibold text-slate-950'>
+                        {t(item.titleKey)}
+                      </h3>
+                      <p className='mt-1 text-xs leading-relaxed text-slate-600'>
+                        {t(item.descriptionKey)}
+                      </p>
+                    </div>
+                  </li>
+                )
+              })}
+            </ul>
+          </aside>
         </div>
       </div>
     </section>

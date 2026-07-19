@@ -19,6 +19,8 @@ For commercial licensing, please contact support@quantumnous.com
 import { useRef, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { HOME_STATS_BACKGROUND_STYLE } from '../../home-layout'
+
 interface CounterProps {
   end: number
   suffix?: string
@@ -105,7 +107,10 @@ export function Stats(_props: StatsProps) {
   ]
 
   return (
-    <div className='border-border/40 bg-muted/10 relative z-10 border-y'>
+    <div
+      className='relative z-10 border-y border-transparent'
+      style={HOME_STATS_BACKGROUND_STYLE}
+    >
       <div className='mx-auto max-w-6xl px-6 py-10 md:py-12'>
         <div className='grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12'>
           {stats.map((s) => (

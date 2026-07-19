@@ -27,6 +27,7 @@ import { isLikelyHtml } from '@/lib/content-format'
 import { useAuthStore } from '@/stores/auth-store'
 
 import { CTA, Features, Hero, HowItWorks, Stats } from './components'
+import { HOME_HEADER_CLASS, HOME_SITE_NAME } from './home-layout'
 import { useHomePageContent } from './hooks'
 
 export function Home() {
@@ -121,7 +122,13 @@ export function Home() {
   }
 
   return (
-    <PublicLayout showMainContainer={false}>
+    <PublicLayout
+      showMainContainer={false}
+      headerProps={{
+        className: HOME_HEADER_CLASS,
+        siteName: HOME_SITE_NAME,
+      }}
+    >
       <Hero isAuthenticated={isAuthenticated} />
       <Stats />
       <Features />
