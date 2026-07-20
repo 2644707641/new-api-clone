@@ -24,7 +24,8 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { useStatus } from '@/hooks/use-status'
 
-import { HOME_HERO_BACKGROUND_STYLE, HOME_TRUST_ITEMS } from '../../home-layout'
+import { Grainient } from '../grainient'
+import { HOME_TRUST_ITEMS } from '../../home-layout'
 
 interface HeroProps {
   className?: string
@@ -68,9 +69,9 @@ export function Hero(props: HeroProps) {
   return (
     <section
       className='relative z-10 overflow-hidden border-b border-transparent px-6 py-16 text-slate-950 md:py-24'
-      style={HOME_HERO_BACKGROUND_STYLE}
     >
-      <div className='mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16'>
+      <Grainient aria-hidden className='pointer-events-none absolute inset-0 z-0' />
+      <div className='relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16'>
         <div className='flex flex-col items-start text-left'>
           <div
             className='landing-animate-fade-up mb-5 inline-flex items-center gap-1.5 rounded-full border border-slate-900/15 bg-white/70 px-3 py-1.5 text-xs font-medium text-slate-950 opacity-0'
