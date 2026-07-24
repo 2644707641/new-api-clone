@@ -14,22 +14,29 @@ echo   Development Mode Stopper
 echo ============================================
 echo.
 
-REM Write netstat output to a temp file first to avoid pipe-deadlock
-REM in for /f when there are many connections.
-set "TMPNET=%TEMP%\stop-dev-netstat.txt"
-netstat -ano > "%TMPNET%" 2>nul
+set "_NET=%TEMP%\_sd_netstat.txt"
+set "_PORT=%TEMP%\_sd_port.txt"
+set "_LIS=%TEMP%\_sd_listen.txt"
+
+REM Dump full netstat to temp file (avoids pipe deadlock)
+netstat -ano > "%_NET%" 2>nul
 
 echo Stopping Go backend (port 3000)...
-for /f "tokens=5" %%a in ('"%SystemRoot%\System32\findstr.exe" ":3000 " "%TMPNET%" ^| "%SystemRoot%\System32\findstr.exe" "LISTENING"') do (
+findstr ":3000 " "%_NET%" > "%_PORT%" 2>nul
+findstr "LISTENING" "%_PORT%" > "%_LIS%" 2>nul
+for /f "tokens=5" %%a in (%_LIS%) do (
     taskkill /F /PID %%a >nul 2>&1 && echo   killed PID %%a
 )
 
 echo Stopping frontend dev server (port 5173)...
-for /f "tokens=5" %%a in ('"%SystemRoot%\System32\findstr.exe" ":5173 " "%TMPNET%" ^| "%SystemRoot%\System32\findstr.exe" "LISTENING"') do (
+findstr ":5173 " "%_NET%" > "%_PORT%" 2>nul
+findstr "LISTENING" "%_PORT%" > "%_LIS%" 2>nul
+for /f "tokens=5" %%a in (%_LIS%) do (
     taskkill /F /PID %%a >nul 2>&1 && echo   killed PID %%a
 )
 
-del "%TMPNET%" >nul 2>&1
+REM Cleanup temp files
+del "%_NET%" "%_PORT%" "%_LIS%" >nul 2>&1
 
 echo.
 echo ============================================
