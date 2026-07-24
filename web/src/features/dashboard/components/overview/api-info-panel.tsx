@@ -32,7 +32,7 @@ import type { PingStatusMap, ApiInfoItem } from '@/features/dashboard/types'
 import { PanelWrapper } from '../ui/panel-wrapper'
 import { ApiInfoItemComponent } from './api-info-item'
 
-export function ApiInfoPanel() {
+export function ApiInfoPanel(props?: { className?: string }) {
   const { t } = useTranslation()
   const { items: list, loading } = useApiInfo()
   const [pingStatus, setPingStatus] = useState<PingStatusMap>({})
@@ -61,10 +61,11 @@ export function ApiInfoPanel() {
       loading={loading}
       empty={!list.length}
       emptyMessage={t('No API routes configured')}
-      height='h-72'
-      contentClassName='p-0'
+      height='flex-1'
+      className={props?.className}
+      contentClassName='p-0 flex flex-1 flex-col'
     >
-      <ScrollArea className='h-72'>
+      <ScrollArea className='flex-1'>
         <div>
           {list.map((item: ApiInfoItem, idx: number) => (
             <div

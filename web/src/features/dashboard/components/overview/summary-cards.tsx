@@ -136,7 +136,7 @@ const HEALTH_CONFIG: Record<
   },
 }
 
-export function SummaryCards() {
+export function SummaryCards(props?: { className?: string }) {
   const { t } = useTranslation()
   const user = useAuthStore((state) => state.auth.user)
   const { status, loading } = useStatus()
@@ -250,8 +250,8 @@ export function SummaryCards() {
   })
 
   return (
-    <div className='bg-card overflow-hidden rounded-2xl border shadow-xs'>
-      <div className='grid xl:grid-cols-[minmax(0,1fr)_19rem]'>
+    <div className={cn('bg-card overflow-hidden rounded-2xl border shadow-xs', props?.className)}>
+      <div className='grid h-full xl:grid-cols-[minmax(0,1fr)_19rem]'>
         <div className='flex flex-col gap-2.5 p-3 sm:gap-3 sm:p-5'>
           <div className='flex flex-wrap items-start justify-between gap-3'>
             <div className='flex flex-col gap-1'>
