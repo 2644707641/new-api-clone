@@ -49,7 +49,11 @@ func GetUserLogs(c *gin.Context) {
 	if role < common.RoleAdminUser {
 		sixMonthsAgo := time.Now().AddDate(0, -6, 0).Unix()
 		if startTimestamp == 0 || startTimestamp < sixMonthsAgo {
-			startTimestamp = sixMonthsAgo
+			c.JSON(http.StatusForbidden, gin.H{
+				"success": false,
+				"message": "普通用户只能查询最近6个月内的日志",
+			})
+			return
 		}
 	}
 
@@ -127,7 +131,11 @@ func DownloadLogs(c *gin.Context) {
 	if !isAdmin {
 		sixMonthsAgo := time.Now().AddDate(0, -6, 0).Unix()
 		if startTimestamp == 0 || startTimestamp < sixMonthsAgo {
-			startTimestamp = sixMonthsAgo
+			c.JSON(http.StatusForbidden, gin.H{
+				"success": false,
+				"message": "普通用户只能下载最近6个月内的日志",
+			})
+			return
 		}
 	}
 

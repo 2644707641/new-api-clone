@@ -128,21 +128,26 @@ export function UsageLogsTable({ logCategory }: UsageLogsTableProps) {
       t,
     ],
     queryFn: async () => {
-      const result = await fetchLogsByCategory({
-        logCategory,
-        isAdmin,
-        page: pagination.pageIndex + 1,
-        pageSize: pagination.pageSize,
-        searchParams,
-        columnFilters,
-      })
+      try {
+        const result = await fetchLogsByCategory({
+          logCategory,
+          isAdmin,
+          page: pagination.pageIndex + 1,
+          pageSize: pagination.pageSize,
+          searchParams,
+          columnFilters,
+        })
 
-      if (!result?.success) {
-        toast.error(result?.message || t('Failed to load logs'))
+        if (!result?.success) {
+          toast.error(result?.message || t('Failed to load logs'))
+          return DEFAULT_LOGS_DATA
+        }
+
+        return result.data || DEFAULT_LOGS_DATA
+      } catch {
+        // axios 拦截器已显示 toast，这里返回空数据避免页面崩溃
         return DEFAULT_LOGS_DATA
       }
-
-      return result.data || DEFAULT_LOGS_DATA
     },
     placeholderData: (previousData, previousQuery) => {
       if (previousQuery?.queryKey[1] === logCategory) {
