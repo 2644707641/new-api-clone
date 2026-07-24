@@ -41,8 +41,8 @@ const notificationMethodLabels = {
     Gotify: 'Gotify 推送',
   },
   fr: { Webhook: 'Webhook', Bark: 'Bark', Gotify: 'Gotify' },
-  ja: { Webhook: 'Webhook', Bark: 'Bark', Gotify: 'Gotify' },
-  ru: { Webhook: 'Вебхук', Bark: 'Bark', Gotify: 'Gotify' },
+  ja: { Webhook: 'ウェブフック', Bark: 'Bark', Gotify: 'Gotify通知' },
+  ru: { Webhook: 'Вебхук', Bark: 'Bark', Gotify: 'Уведомления Gotify' },
   vi: { Webhook: 'Webhook', Bark: 'Bark', Gotify: 'Gotify' },
 }
 
