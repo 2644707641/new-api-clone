@@ -19,10 +19,10 @@ For commercial licensing, please contact support@quantumnous.com
 import type { GrainientProps } from './grainient'
 
 export const HOME_GRAINIENT_CONFIG = {
-  color1: '#FF9FFC',
-  color2: '#5227FF',
-  color3: '#B497CF',
-  timeSpeed: 1.95,
+  color1: '#a13eff',
+  color2: '#00a5c1',
+  color3: '#b497cf',
+  timeSpeed: 1.3,
   colorBalance: 0,
   warpStrength: 1,
   warpFrequency: 5,
@@ -32,7 +32,7 @@ export const HOME_GRAINIENT_CONFIG = {
   blendSoftness: 0.05,
   rotationAmount: 500,
   noiseScale: 2,
-  grainAmount: 0.1,
+  grainAmount: 0.35,
   grainScale: 2,
   grainAnimated: false,
   contrast: 1.5,

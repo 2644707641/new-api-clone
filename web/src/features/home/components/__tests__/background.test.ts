@@ -22,12 +22,12 @@ import { describe, test } from 'node:test'
 import { HOME_GRAINIENT_CONFIG } from '../background-config'
 
 describe('home background', () => {
-  test('applies the configured pink, purple, and lavender Grainient preset', () => {
+  test('applies the configured rose, cyan, and lavender Grainient preset', () => {
     assert.deepEqual(HOME_GRAINIENT_CONFIG, {
-      color1: '#FF9FFC',
-      color2: '#5227FF',
-      color3: '#B497CF',
-      timeSpeed: 1.95,
+      color1: '#a13eff',
+      color2: '#00a5c1',
+      color3: '#b497cf',
+      timeSpeed: 1.3,
       colorBalance: 0,
       warpStrength: 1,
       warpFrequency: 5,
@@ -37,7 +37,7 @@ describe('home background', () => {
       blendSoftness: 0.05,
       rotationAmount: 500,
       noiseScale: 2,
-      grainAmount: 0.1,
+      grainAmount: 0.35,
       grainScale: 2,
       grainAnimated: false,
       contrast: 1.5,
