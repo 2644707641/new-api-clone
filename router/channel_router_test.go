@@ -37,6 +37,19 @@ func TestChannelStatusRoutesRegisterWithoutConflict(t *testing.T) {
 	})
 }
 
+func TestOperationsReportRouteIsRegistered(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	engine := gin.New()
+	SetApiRouter(engine)
+
+	for _, route := range engine.Routes() {
+		if route.Method == http.MethodGet && route.Path == "/api/operations/report" {
+			return
+		}
+	}
+	t.Fatal("operations report route is not registered")
+}
+
 func assertChannelRoutePermission(t *testing.T, method string, path string, permission authz.Permission, handler any) {
 	t.Helper()
 	for _, route := range channelPermissionRoutes {
