@@ -148,6 +148,11 @@ For commercial licensing, please contact support@quantumnous.com
   --sidebar-ring: oklch(0.58 0.2 250);
   --skeleton-base: oklch(0.97 0 0);
   --skeleton-highlight: oklch(0.985 0 0);
+  --home-hero-background: color-mix(
+    in oklch,
+    var(--info) 9%,
+    var(--background)
+  );
   --table-row: var(--background);
   --table-header: color-mix(
     in oklch,
@@ -207,6 +212,11 @@ For commercial licensing, please contact support@quantumnous.com
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 17%);
   --ring: oklch(0.554 0.148 250.726);
+  --home-hero-background: color-mix(
+    in oklch,
+    var(--info) 7%,
+    var(--background)
+  );
   --chart-1: oklch(0.76 0.14 250);
   --chart-2: oklch(0.76 0.13 200);
   --chart-3: oklch(0.76 0.13 285);

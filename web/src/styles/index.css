@@ -143,6 +143,14 @@ For commercial licensing, please contact support@quantumnous.com
   max-width: 1536px;
 }
 
+@utility bg-home-hero {
+  background-color: var(--home-hero-background);
+}
+
+@utility min-h-home-hero {
+  min-height: calc(100svh - var(--app-header-height));
+}
+
 @utility no-scrollbar {
   /* Hide scrollbar for Chrome, Safari and Opera */
   &::-webkit-scrollbar {
