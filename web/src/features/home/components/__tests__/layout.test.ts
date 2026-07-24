@@ -38,4 +38,18 @@ describe('home hero layout', () => {
     assert.ok(columnClasses.includes('grid-cols-1'))
     assert.ok(columnClasses.includes('lg:grid-cols-2'))
   })
+
+  test('centers the remaining hero content with its layout row', () => {
+    const columnClasses = homeHeroLayoutClasses.columns.split(' ')
+
+    assert.ok(columnClasses.includes('items-center'))
+  })
+
+  test('spaces the remaining hero copy across responsive breakpoints', () => {
+    const introClasses = homeHeroLayoutClasses.intro.split(' ')
+
+    assert.ok(introClasses.includes('gap-10'))
+    assert.ok(introClasses.includes('sm:gap-12'))
+    assert.ok(introClasses.includes('lg:gap-14'))
+  })
 })

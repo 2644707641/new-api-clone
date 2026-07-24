@@ -16,12 +16,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-export const homeHeroLayoutClasses = {
-  section:
-    'min-h-home-hero relative z-10 overflow-hidden px-5 pt-24 pb-16 sm:px-6 md:pt-28 md:pb-20 lg:flex lg:items-center lg:pt-24 lg:pb-16',
-  columns:
-    'relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-16',
-  intro:
-    'flex min-w-0 flex-col items-start gap-10 text-left sm:gap-12 lg:gap-14',
-  panel: 'flex min-w-0 w-full justify-center lg:justify-end',
-} as const
+import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import { describe, test } from 'node:test'
+
+describe('system brand', () => {
+  test('keeps the inline system name without rendering a logo', () => {
+    const source = readFileSync(
+      new URL('../system-brand.tsx', import.meta.url),
+      'utf8'
+    )
+    const inlineStart = source.indexOf("if (variant === 'inline')")
+    const inlineEnd = source.indexOf('\n  }\n\n  return (', inlineStart)
+    const inlineSource = source.slice(inlineStart, inlineEnd)
+
+    assert.match(inlineSource, /\{name\}/)
+    assert.doesNotMatch(inlineSource, /<img\b/)
+  })
+})

@@ -16,18 +16,20 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { Link2, Settings } from 'lucide-react'
-import { useState } from 'react'
+import { Link2, Settings, SlidersHorizontal } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { TitledCard } from '@/components/ui/titled-card'
 
 import type { UserProfile } from '../types'
 import { AccountBindingsTab } from './tabs/account-bindings-tab'
-import { NotificationTab } from './tabs/notification-tab'
+import {
+  NotificationPreferencesSection,
+  NotificationSettingsSection,
+} from './tabs/notification-tab'
+import { useNotificationSettings } from './tabs/use-notification-settings'
 
 // ============================================================================
 // Profile Settings Card Component
@@ -45,7 +47,7 @@ export function ProfileSettingsCard({
   onProfileUpdate,
 }: ProfileSettingsCardProps) {
   const { t } = useTranslation()
-  const [activeTab, setActiveTab] = useState('bindings')
+  const notificationSettings = useNotificationSettings(profile, onProfileUpdate)
 
   if (loading) {
     return (
@@ -54,11 +56,32 @@ export function ProfileSettingsCard({
           <Skeleton className='h-6 w-32' />
           <Skeleton className='mt-2 h-4 w-48' />
         </CardHeader>
-        <CardContent className='space-y-4 p-3 sm:p-5'>
-          <Skeleton className='h-10 w-full' />
-          {['bindings', 'preferences', 'notifications'].map((key) => (
-            <Skeleton key={key} className='h-20 w-full' />
-          ))}
+        <CardContent className='p-3 sm:p-5'>
+          <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+            {[
+              {
+                key: 'bindings',
+                className: 'lg:col-start-1 lg:row-start-1',
+              },
+              {
+                key: 'preferences',
+                className: 'lg:col-start-1 lg:row-start-2',
+              },
+              {
+                key: 'other-settings',
+                className: 'lg:col-start-2 lg:row-start-1 lg:row-span-2',
+              },
+            ].map(({ key, className }) => (
+              <div
+                key={key}
+                className={`space-y-3 rounded-xl border p-3 sm:p-5 ${className}`}
+              >
+                <Skeleton className='h-5 w-32' />
+                <Skeleton className='h-16 w-full' />
+                <Skeleton className='h-16 w-full' />
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
     )
@@ -72,36 +95,76 @@ export function ProfileSettingsCard({
       iconTone='info'
       disableHoverEffect
     >
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className='grid w-full grid-cols-2 items-stretch gap-1 rounded-xl p-1 group-data-horizontal/tabs:h-10'>
-          <TabsTrigger
-            value='bindings'
-            className='h-full gap-2 rounded-lg px-3 py-0 leading-none'
-          >
-            <Link2 className='h-4 w-4' />
-            <span className='hidden sm:inline'>{t('Account Bindings')}</span>
-            <span className='sm:hidden'>{t('Bindings')}</span>
-          </TabsTrigger>
-          <TabsTrigger
-            value='settings'
-            className='h-full gap-2 rounded-lg px-3 py-0 leading-none'
-          >
-            <Settings className='h-4 w-4' />
-            <span className='hidden sm:inline'>
-              {t('Settings & Preferences')}
-            </span>
-            <span className='sm:hidden'>{t('Settings')}</span>
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value='bindings' className='mt-4 sm:mt-6'>
+      <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+        <section
+          aria-labelledby='profile-account-bindings-title'
+          className='space-y-4 rounded-xl border p-3 sm:p-5 lg:col-start-1 lg:row-start-1'
+        >
+          <div className='flex items-center gap-2'>
+            <Link2
+              className='text-muted-foreground h-4 w-4'
+              aria-hidden='true'
+            />
+            <h3
+              id='profile-account-bindings-title'
+              className='text-sm font-semibold'
+            >
+              {t('Account Bindings')}
+            </h3>
+          </div>
           <AccountBindingsTab profile={profile} onUpdate={onProfileUpdate} />
-        </TabsContent>
+        </section>
 
-        <TabsContent value='settings' className='mt-4 sm:mt-6'>
-          <NotificationTab profile={profile} onUpdate={onProfileUpdate} />
-        </TabsContent>
-      </Tabs>
+        <section
+          aria-labelledby='profile-preferences-title'
+          className='space-y-4 rounded-xl border p-3 sm:p-5 lg:col-start-1 lg:row-start-2'
+        >
+          <div className='flex items-center gap-2'>
+            <SlidersHorizontal
+              className='text-muted-foreground h-4 w-4'
+              aria-hidden='true'
+            />
+            <h3
+              id='profile-preferences-title'
+              className='text-sm font-semibold'
+            >
+              {t('Preferences')}
+            </h3>
+          </div>
+          <p className='text-muted-foreground -mt-2 text-xs'>
+            {t('Configure your account behavior preferences')}
+          </p>
+          <NotificationPreferencesSection
+            settings={notificationSettings.settings}
+            updateField={notificationSettings.updateField}
+            isAdmin={notificationSettings.isAdmin}
+            loading={notificationSettings.loading}
+            onSave={notificationSettings.handleSave}
+          />
+        </section>
+
+        <section
+          aria-labelledby='profile-other-settings-title'
+          className='space-y-4 rounded-xl border p-3 sm:p-5 lg:col-start-2 lg:row-span-2 lg:row-start-1'
+        >
+          <div className='flex items-center gap-2'>
+            <Settings
+              className='text-muted-foreground h-4 w-4'
+              aria-hidden='true'
+            />
+            <h3
+              id='profile-other-settings-title'
+              className='text-sm font-semibold'
+            >
+              {t('Other Settings')}
+            </h3>
+          </div>
+          <NotificationSettingsSection
+            settings={notificationSettings.settings}
+            updateField={notificationSettings.updateField}
+          />
+        </section>
+      </div>
     </TitledCard>
   )
 }
