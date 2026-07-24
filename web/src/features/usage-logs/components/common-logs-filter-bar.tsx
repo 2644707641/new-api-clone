@@ -19,9 +19,10 @@ For commercial licensing, please contact support@quantumnous.com
 import { useQueryClient, useIsFetching } from '@tanstack/react-query'
 import { useNavigate, getRouteApi } from '@tanstack/react-router'
 import type { Table } from '@tanstack/react-table'
-import { Eye, EyeOff } from 'lucide-react'
+import { Download, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { useState, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -40,7 +41,8 @@ import {
 
 import { LOG_TYPE_ALL_VALUE, LOG_TYPE_FILTERS } from '../constants'
 import { buildSearchParams } from '../lib/filter'
-import { getDefaultTimeRange } from '../lib/utils'
+import { buildApiParams, getDefaultTimeRange } from '../lib/utils'
+import { downloadLogs } from '../api'
 import type { CommonLogFilters } from '../types'
 import { CommonLogsStats } from './common-logs-stats'
 import { CompactDateTimeRangePicker } from './compact-date-time-range-picker'
@@ -233,6 +235,39 @@ export function CommonLogsFilterBar<TData>(
     [handleApply]
   )
 
+  const [downloading, setDownloading] = useState(false)
+
+  const handleDownload = useCallback(async () => {
+    setDownloading(true)
+    try {
+      const params = buildApiParams({
+        page: 1,
+        pageSize: 10000,
+        searchParams,
+        columnFilters: [],
+        isAdmin,
+      })
+      // 移除分页参数，下载不需要
+      const { p: _p, page_size: _ps, ...downloadParams } = params
+      const blob = await downloadLogs(downloadParams)
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      const now = new Date()
+      const filename = `logs_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}.csv`
+      link.download = filename
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+      toast.success(t('Download started'))
+    } catch {
+      toast.error(t('Download failed'))
+    } finally {
+      setDownloading(false)
+    }
+  }, [searchParams, isAdmin, t])
+
   const hasExpandedFilters =
     !!filters.token ||
     !!filters.username ||
@@ -285,6 +320,28 @@ export function CommonLogsFilterBar<TData>(
       </TooltipTrigger>
       <TooltipContent>
         {sensitiveVisible ? t('Hide') : t('Show')}
+      </TooltipContent>
+    </Tooltip>
+  )
+
+  const downloadButton = (
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <Button
+            variant='ghost'
+            size='icon'
+            onClick={handleDownload}
+            disabled={downloading}
+            aria-label={t('Download Logs')}
+            className='text-muted-foreground hover:text-foreground size-7'
+          />
+        }
+      >
+        {downloading ? <Loader2 className='animate-spin' /> : <Download />}
+      </TooltipTrigger>
+      <TooltipContent>
+        {t('Download Logs')}
       </TooltipContent>
     </Tooltip>
   )
@@ -413,7 +470,12 @@ export function CommonLogsFilterBar<TData>(
     <LogsFilterToolbar
       table={props.table}
       stats={statsBar}
-      actionStart={sensitiveToggle}
+      actionStart={
+        <>
+          {sensitiveToggle}
+          {downloadButton}
+        </>
+      }
       primaryFilters={
         <>
           {dateRangeFilter}

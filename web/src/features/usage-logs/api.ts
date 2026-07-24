@@ -84,6 +84,21 @@ export const getUserLogStats = (
   params: Omit<GetLogStatsParams, 'username' | 'channel'> = {}
 ) => fetchLogStats('/api/log', params, false)
 
+// ============================================================================
+// Download Logs (CSV export)
+// ============================================================================
+
+export async function downloadLogs(
+  params: Record<string, unknown>
+): Promise<Blob> {
+  const queryParams = buildQueryParams(params)
+  const res = await api.get(`/api/log/download?${queryParams}`, {
+    responseType: 'blob',
+    disableDuplicate: true,
+  })
+  return res.data as Blob
+}
+
 export async function getUserInfo(
   userId: number
 ): Promise<{ success: boolean; message?: string; data?: UserInfo }> {
