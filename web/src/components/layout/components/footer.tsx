@@ -42,11 +42,7 @@ interface FooterProps {
   className?: string
 }
 
-const NEW_API_FOOTER_ATTRIBUTION_KEY = [
-  'footer',
-  'new' + 'api',
-  'projectAttributionSuffix',
-].join('.')
+const ICP_FILING_NUMBER = '粤ICP备2023121579号-2'
 
 function FooterLinkItem(props: { link: FooterLink }) {
   const { t } = useTranslation()
@@ -121,44 +117,44 @@ function LegalLinks(props: { leadingSeparator?: boolean }) {
   )
 }
 
-// inline=true returns just the inner span for composition in a parent flex
-// row. inline=false wraps in a centered/right-aligned div (default).
-function ProjectAttribution(props: { currentYear: number; inline?: boolean }) {
+function SiteLegalInfo() {
   const { t } = useTranslation()
-  const content = (
+
+  return (
     <span className='text-muted-foreground/45'>
-      &copy; {props.currentYear}{' '}
       <a
-        href='https://github.com/QuantumNous/new-api'
+        href='https://csrouter.com'
         target='_blank'
         rel='noopener noreferrer'
         className='text-foreground/70 hover:text-foreground font-medium transition-colors'
       >
-        {t('New API')}
+        csrouter.com
       </a>
-      . {t(NEW_API_FOOTER_ATTRIBUTION_KEY)}
+      <span aria-hidden='true' className='text-muted-foreground/30 mx-1'>
+        ·
+      </span>
+      {t('ICP filing number')}: {ICP_FILING_NUMBER}
     </span>
   )
-  if (props.inline) {
-    return content
-  }
+}
+
+function SiteAttribution(props: { currentYear: number }) {
+  const { t } = useTranslation()
+
   return (
-    <div className='text-muted-foreground/45 text-center text-xs sm:text-right'>
-      {content}
-    </div>
+    <span className='text-muted-foreground/45 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center'>
+      <span>
+        &copy; {props.currentYear} CS ROUTER. {t('footer.defaultCopyright')}
+      </span>
+      <SiteLegalInfo />
+    </span>
   )
 }
 
 export function Footer(props: FooterProps) {
   const { t } = useTranslation()
-  const {
-    systemName,
-    logo: systemLogo,
-    footerHtml,
-    demoSiteEnabled,
-  } = useSystemConfig()
+  const { systemName, footerHtml, demoSiteEnabled } = useSystemConfig()
 
-  const displayLogo = systemLogo || props.logo || '/logo.png'
   const displayName = systemName || props.name || 'New API'
   const isDemoSiteMode = Boolean(demoSiteEnabled)
   const currentYear = new Date().getFullYear()
@@ -231,14 +227,14 @@ export function Footer(props: FooterProps) {
         )}
       >
         <div className='mx-auto w-full max-w-6xl px-6 py-5'>
-          <div className='bg-muted/20 border-border/50 flex flex-col items-center justify-between gap-4 rounded-2xl border px-4 py-4 backdrop-blur-sm sm:flex-row sm:px-5'>
+          <div className='bg-muted/20 border-border/50 flex flex-col items-center gap-4 rounded-2xl border px-4 py-4 backdrop-blur-sm sm:px-5'>
             <div
               className='custom-footer text-muted-foreground min-w-0 text-center text-sm sm:text-left'
               dangerouslySetInnerHTML={{ __html: footerHtml }}
             />
-            <div className='border-border/60 text-muted-foreground/45 flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-1 border-t pt-4 text-xs sm:w-auto sm:justify-end sm:border-t-0 sm:border-l sm:pt-0 sm:pl-5'>
+            <div className='border-border/60 text-muted-foreground/45 flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-1 border-t pt-4 text-xs'>
               <LegalLinks />
-              <ProjectAttribution currentYear={currentYear} inline />
+              <SiteAttribution currentYear={currentYear} />
             </div>
           </div>
         </div>
@@ -250,16 +246,11 @@ export function Footer(props: FooterProps) {
     <footer
       className={cn('border-border/40 relative z-10 border-t', props.className)}
     >
-      <div className='mx-auto max-w-6xl px-6 py-12 md:py-16'>
+      <div className='mx-auto max-w-7xl px-5 py-12 md:py-16'>
         <div className='flex flex-col justify-between gap-10 md:flex-row md:gap-16'>
           {/* Brand column */}
           <div className='shrink-0'>
-            <Link to='/' className='group flex items-center gap-2.5'>
-              <img
-                src={displayLogo}
-                alt={displayName}
-                className='size-7 rounded-lg object-contain'
-              />
+            <Link to='/' className='flex items-center'>
               <span className='text-sm font-semibold tracking-tight'>
                 {displayName}
               </span>
@@ -272,14 +263,14 @@ export function Footer(props: FooterProps) {
           {/* Links columns */}
           {isDemoSiteMode && (
             <div className='grid grid-cols-3 gap-8 md:gap-16'>
-              {displayColumns.map((column, index) => (
-                <div key={index}>
+              {displayColumns.map((column) => (
+                <div key={column.title}>
                   <p className='text-muted-foreground/50 mb-3 text-xs font-medium tracking-wider uppercase'>
                     {t(column.title)}
                   </p>
                   <ul className='space-y-2.5'>
-                    {column.links.map((link, linkIndex) => (
-                      <li key={linkIndex}>
+                    {column.links.map((link) => (
+                      <li key={link.href}>
                         <FooterLinkItem link={link} />
                       </li>
                     ))}
@@ -290,17 +281,10 @@ export function Footer(props: FooterProps) {
           )}
         </div>
 
-        {/* Copyright + optional legal links inline on the left, project
-            attribution on the right; wraps on narrow screens. */}
-        <div className='border-border/30 mt-12 flex flex-col items-center justify-between gap-x-3 gap-y-2 border-t pt-6 sm:flex-row'>
-          <div className='text-muted-foreground/40 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs sm:justify-start'>
-            <span>
-              &copy; {currentYear} {displayName}.{' '}
-              {props.copyright ?? t('footer.defaultCopyright')}
-            </span>
-            <LegalLinks leadingSeparator />
-          </div>
-          <ProjectAttribution currentYear={currentYear} />
+        {/* Centered site attribution and optional legal links. */}
+        <div className='border-border/30 mt-12 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 border-t pt-6 text-center text-xs'>
+          <SiteAttribution currentYear={currentYear} />
+          <LegalLinks leadingSeparator />
         </div>
       </div>
     </footer>
